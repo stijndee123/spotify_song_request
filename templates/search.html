@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="{{url_for('static', filename='scripts.js')}}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <title>Song Search</title>
+    </head>
+
+    <body>
+        <div class="queue-link-container">
+            <a href="/song_queue/queue" class="queue-link">Queue</a>
+        </div>        
+        <form id="searchForm" class="search-container">
+            <input type="text" name="name" placeholder="Search Song Names Here" class="search-bar">
+            <input type="submit" value="🔍" class="search-btn">
+        </form>
+    </body>
+</html>

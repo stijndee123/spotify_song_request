@@ -1,0 +1,164 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    /* Dark background similar to Spotify */
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    /* White text */
+}
+
+h1 {
+    padding-left: 15px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+form {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar {
+  width: 300px;
+  padding: 10px 15px;
+  border-radius: 50px 0 0 50px; /* Rounded left side */
+  border: 1px solid #333;
+  background-color: #282828;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar::placeholder {
+  color: #b3b3b3;
+}
+
+.search-bar:focus {
+  background-color: #404040;
+}
+
+.search-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 0 50px 50px 0; /* Rounded right side */
+  border: none;
+  background-color: #1db954;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  outline: none;
+}
+
+.search-btn:hover {
+  background-color: #1aa34a;
+}
+
+.song-list {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    /* Thin line to separate items */
+    transition: background-color 0.3s;
+}
+
+.song-image {
+    width: 60px !important;
+    height: 60px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.song-author {
+    font-size: 14px;
+    color: #b3b3b3;
+    /* Lighter text for the author's name */
+}
+
+.queue-btn {
+  width: 40px; /* Fixed width for the button */
+  height: 40px; /* Fixed height for the button */
+  border-radius: 50%; /* Circular button */
+  border: none;
+  background-color: #1db954; /* Same color as the search button */
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px; /* Icon size */
+  transition: background-color 0.3s ease;
+  outline: none;
+  position: absolute; /* Position absolute */
+  right: 20px; /* Right spacing */
+}
+
+.queue-btn:hover {
+  background-color: #1aa34a; /* Darker green on hover */
+}
+
+/* Centered Queue Link */
+.queue-link-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0; /* Margin for spacing */
+}
+
+.queue-link {
+  padding: 10px 20px;
+  border-radius: 30px; /* Rounded edges */
+  background-color: #1db954; /* Same color as buttons */
+  color: #fff;
+  text-decoration: none; /* Remove underline */
+  font-size: 18px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.queue-link:hover {
+  background-color: #1aa34a; /* Darker green on hover */
+}
+
+/* Adding responsiveness */
+@media (max-width: 600px) {
+    .song-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .song-title {
+        font-size: 14px;
+    }
+
+    .song-author {
+        font-size: 12px;
+    }
+}

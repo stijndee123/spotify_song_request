@@ -3,17 +3,26 @@ from flask_sqlalchemy import SQLAlchemy
 from apscheduler.schedulers.background import BackgroundScheduler
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import config
+import os  # toegevoegd om env vars te lezen
 import time
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///queued_songs_test.db'
 db = SQLAlchemy(app)
 
-# Configure Spotify API credentials
+# Lees Spotify API credentials uit environment variables
+client_id = os.getenv('SPOTIFY_CLIENT_ID')
+client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
+redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI', 'http://localhost:8000/callback')  # fallback
+
+# Spotify scope
 scope = "user-modify-playback-state,user-read-playback-state"
-spOAuth = SpotifyOAuth(client_id=config.client_id, client_secret=config.client_secret, redirect_uri='http://google.com/',open_browser=False, scope=scope)
+
+# Setup Spotify OAuth
+spOAuth = SpotifyOAuth(client_id=client_id, client_secret=client_secret,
+                      redirect_uri=redirect_uri, open_browser=False, scope=scope)
 sp = spotipy.Spotify(auth_manager=spOAuth)
+
 past_track_uri = ""
 print(" * User logged in: " + sp.current_user()['display_name'])
 
@@ -33,23 +42,21 @@ def checkSong():
                 db.session.add(song)
                 db.session.commit()
                 print("song: " + current_track['item']['name'] + " added to database")
-    except:
-        print("no song playing")  
-        
-        
+    except Exception as e:
+        print("no song playing or error:", e)
+
 def startScheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=checkSong, trigger="interval", seconds = 30)
+    scheduler.add_job(func=checkSong, trigger="interval", seconds=30)
     scheduler.start()
 
 @app.route('/song_queue/search')
 def home():
     song_name = request.args.get('name')
     if song_name:
-        tracks = sp.search(song_name, limit=20, type= 'track')
+        tracks = sp.search(song_name, limit=20, type='track')
         tracks = tracks['tracks']['items']
-        return render_template('results.html', tracks= tracks)
-        
+        return render_template('results.html', tracks=tracks)
     return render_template('search.html')
 
 @app.route('/song_queue/api/queue', methods=['POST'])
@@ -57,7 +64,7 @@ def addToQueue():
     try:
         uri = request.get_data(as_text=True)
         sp.add_to_queue(uri=uri)
-        return jsonify({"message":"recieved"}), 201
+        return jsonify({"message": "received"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -66,8 +73,7 @@ def queue():
     queue = sp.queue()
     currently_playing = queue['currently_playing']
     queue = queue['queue']
-    return render_template('queue.html', currently_playing = currently_playing, queue = queue)
-
+    return render_template('queue.html', currently_playing=currently_playing, queue=queue)
 
 if __name__ == '__main__':
     with app.app_context():
